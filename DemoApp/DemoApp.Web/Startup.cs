@@ -1,4 +1,5 @@
-﻿using DemoApp.Web.Data;
+﻿using AutoMapper;
+using DemoApp.Web.Data;
 using DemoApp.Web.Models.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +24,8 @@ namespace DemoApp.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddIdentity<User, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true; /* Registrar un solo email con la cuenta*/

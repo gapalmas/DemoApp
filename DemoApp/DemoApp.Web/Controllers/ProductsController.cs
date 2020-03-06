@@ -7,21 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DemoApp.Web.Data;
 using DemoApp.Web.Models.Entities;
+using AutoMapper;
+using DemoApp.Web.DTOs;
 
 namespace DemoApp.Web.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly DataContext _context;
+        private readonly IMapper Mapper;
 
-        public ProductsController(DataContext context)
+        public ProductsController(DataContext context, IMapper mapper)
         {
             _context = context;
+            Mapper = mapper;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            //var products = await _context.Products.ToListAsync();
+            //var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
+            //return View(model);
+
             return View(await _context.Products.ToListAsync());
         }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DemoApp.Web.Models.Entities.Product>
+﻿@model IEnumerable<DemoApp.Web.DTOs.ProductDTO>
 
 @{
     ViewData["Title"] = "Index";
@@ -21,7 +21,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
@@ -32,7 +32,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StockMax)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -48,7 +48,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
@@ -59,7 +59,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StockMax)
-            </td>
+            </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
