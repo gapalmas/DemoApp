@@ -26,11 +26,11 @@ namespace DemoApp.Web.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            //var products = await _context.Products.ToListAsync();
-            //var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
-            //return View(model);
+            var products = await _context.Products.ToListAsync();
+            var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
+            return View(model);
 
-            return View(await _context.Products.ToListAsync());
+            //return View(await _context.Products.ToListAsync());
         }
 
         // GET: Products/Details/5
