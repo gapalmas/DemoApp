@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DemoApp.Web.Data;
+using DemoApp.Web.Data.DAL;
 using DemoApp.Web.Models.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +44,8 @@ namespace DemoApp.Web
                 cfg.UseMySql(this.Configuration.GetConnectionString("MySQLConnection"));
                 //cfg.UseSqlServer(this.Configuration.GetConnectionString("SQLServerConnection"));
             });
+
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddTransient<Seeder>();
 

@@ -9,6 +9,7 @@ using DemoApp.Web.Data;
 using DemoApp.Web.Models.Entities;
 using AutoMapper;
 using DemoApp.Web.DTOs;
+using DemoApp.Web.Data.DAL;
 
 namespace DemoApp.Web.Controllers
 {
@@ -16,17 +17,20 @@ namespace DemoApp.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly IMapper Mapper;
+        private readonly IProductRepository productRepository;
 
-        public ProductsController(DataContext context, IMapper mapper)
+        public ProductsController(DataContext context, IMapper mapper, IProductRepository productRepository)
         {
             _context = context;
             Mapper = mapper;
+            this.productRepository = productRepository;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products.ToListAsync();
+            //var products = await _context.Products.ToListAsync();
+            var products =await Task.Run(() => productRepository.GetProducts());
             var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
             return View(model);
 
