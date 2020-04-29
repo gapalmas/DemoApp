@@ -17,9 +17,9 @@ namespace DemoApp.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly IMapper Mapper;
-        private readonly IProductRepository productRepository;
+        private readonly IRepository<Product> productRepository;
 
-        public ProductsController(DataContext context, IMapper mapper, IProductRepository productRepository)
+        public ProductsController(DataContext context, IMapper mapper, IRepository<Product> productRepository)
         {
             _context = context;
             Mapper = mapper;
@@ -30,7 +30,7 @@ namespace DemoApp.Web.Controllers
         public async Task<IActionResult> Index()
         {
             //var products = await _context.Products.ToListAsync();
-            var products =await Task.Run(() => productRepository.GetProducts());
+            var products = await Task.Run(() => productRepository.Entities.Where(p => p.Status == true));
             var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
             return View(model);
 

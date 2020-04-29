@@ -45,7 +45,7 @@ namespace DemoApp.Web
                 //cfg.UseSqlServer(this.Configuration.GetConnectionString("SQLServerConnection"));
             });
 
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IRepository<Product>, GenericRepository<Product>>();
 
             services.AddTransient<Seeder>();
 
