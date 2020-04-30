@@ -17,20 +17,23 @@ namespace DemoApp.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly IMapper Mapper;
-        private readonly IRepository<Product> productRepository;
+        //private readonly IRepository<Product> productRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public ProductsController(DataContext context, IMapper mapper, IRepository<Product> productRepository)
+        public ProductsController(DataContext context, IMapper mapper, IUnitOfWork unitOfWork /*IRepository<Product> productRepository*/)
         {
             _context = context;
             Mapper = mapper;
-            this.productRepository = productRepository;
+            this.unitOfWork = unitOfWork;
+            //this.productRepository = productRepository;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
             //var products = await _context.Products.ToListAsync();
-            var products = await Task.Run(() => productRepository.Entities.Where(p => p.Status == true));
+            //var products = await Task.Run(() => productRepository.Entities.Where(p => p.Status == true));
+            var products = await Task.Run(() => unitOfWork.ProductRepository.Entities.Where(p => p.Status == true));
             var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
             return View(model);
 

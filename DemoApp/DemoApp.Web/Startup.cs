@@ -46,6 +46,7 @@ namespace DemoApp.Web
             });
 
             services.AddScoped<IRepository<Product>, GenericRepository<Product>>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<Seeder>();
 
