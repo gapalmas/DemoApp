@@ -33,7 +33,20 @@ namespace DemoApp.Web.Controllers
         {
             //var products = await _context.Products.ToListAsync();
             //var products = await Task.Run(() => productRepository.Entities.Where(p => p.Status == true));
+            //CREATE
+            Product _productNew = new Product() { Name = "Producto nuevo", Status = true, Price = 50, Stock = 1, StockMax = 3, StockMin = 2 };
+            unitOfWork.ProductRepository.Add(_productNew);
+            unitOfWork.Commit();
+            //READ
             var products = await Task.Run(() => unitOfWork.ProductRepository.Entities.Where(p => p.Status == true));
+            //UPDATE
+            Product _product = products.First(p => p.Id == 1);
+            _product.Name = "Nombre Modificado";
+            unitOfWork.Commit();
+            //DELETE
+            unitOfWork.ProductRepository.Remove(_product);
+            //Reject Changes
+            unitOfWork.RejectChanges();
             var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
             return View(model);
 
