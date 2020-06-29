@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DemoApp.Web.Data;
-using DemoApp.Web.Models.Entities;
 using AutoMapper;
 using DemoApp.Web.DTOs;
-using DemoApp.Web.Data.DAL;
+using App.Entities;
+using App.Infrastructure.Data;
+using App.Core.Interfaces;
 
 namespace DemoApp.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly DataContext _context;
         private readonly IMapper Mapper;
-        //private readonly IRepository<Product> productRepository;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IOperations<Product> OperationsPro;
 
-        public ProductsController(DataContext context, IMapper mapper, IUnitOfWork unitOfWork /*IRepository<Product> productRepository*/)
+        public ProductsController(IMapper Mapper, IOperations<Product> OperationsPro)
         {
-            _context = context;
-            Mapper = mapper;
-            this.unitOfWork = unitOfWork;
-            //this.productRepository = productRepository;
+            this.Mapper = Mapper;
+            this.OperationsPro = OperationsPro;
         }
 
         // GET: Products
@@ -34,19 +29,11 @@ namespace DemoApp.Web.Controllers
             //var products = await _context.Products.ToListAsync();
             //var products = await Task.Run(() => productRepository.Entities.Where(p => p.Status == true));
             //CREATE
-            Product _productNew = new Product() { Name = "Producto nuevo", Status = true, Price = 50, Stock = 1, StockMax = 3, StockMin = 2 };
-            unitOfWork.ProductRepository.Add(_productNew);
-            unitOfWork.Commit();
+            var products = await OperationsPro.FindAllAsync(p=> p.Status == true);
             //READ
-            var products = await Task.Run(() => unitOfWork.ProductRepository.Entities.Where(p => p.Status == true));
             //UPDATE
-            Product _product = products.First(p => p.Id == 1);
-            _product.Name = "Nombre Modificado";
-            unitOfWork.Commit();
             //DELETE
-            unitOfWork.ProductRepository.Remove(_product);
             //Reject Changes
-            unitOfWork.RejectChanges();
             var model = Mapper.Map<IEnumerable<ProductDTO>>(products);
             return View(model);
 
@@ -61,8 +48,7 @@ namespace DemoApp.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await OperationsPro.FindAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -86,8 +72,8 @@ namespace DemoApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                Product _productNew = new Product() { Name = "Producto nuevo", Status = true, Price = 50, Stock = 1, StockMax = 3, StockMin = 2 };
+                var products = await OperationsPro.CreateAsync(_productNew);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -101,7 +87,7 @@ namespace DemoApp.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await OperationsPro.FindAsync(p=>p.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -125,8 +111,7 @@ namespace DemoApp.Web.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    await OperationsPro.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,8 +137,7 @@ namespace DemoApp.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await OperationsPro.FindAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -167,15 +151,14 @@ namespace DemoApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            var product = await OperationsPro.FindAsync(m => m.Id == id);
+           OperationsPro.Delete(product);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return OperationsPro.Exists(p => p.Id == id);
         }
     }
 }

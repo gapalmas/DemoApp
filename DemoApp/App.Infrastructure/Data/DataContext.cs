@@ -1,8 +1,8 @@
-﻿using DemoApp.Web.Models.Entities;
+﻿using App.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DemoApp.Web.Data
+namespace App.Infrastructure.Data
 {
     public class DataContext : IdentityDbContext<User>
     {

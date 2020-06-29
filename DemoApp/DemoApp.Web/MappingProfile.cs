@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using App.Entities;
+using AutoMapper;
 using DemoApp.Web.DTOs;
-using DemoApp.Web.Models.Entities;
 
 namespace DemoApp.Web
 {

@@ -1,4 +1,5 @@
-﻿using DemoApp.Web.Models.Entities;
+﻿using App.Entities;
+using App.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;

@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using App.Core.Interfaces;
+using App.Core.UseCases;
+using App.Entities;
+using App.Infrastructure.Data;
+using AutoMapper;
 using DemoApp.Web.Data;
-using DemoApp.Web.Data.DAL;
-using DemoApp.Web.Models.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -45,8 +47,8 @@ namespace DemoApp.Web
                 //cfg.UseSqlServer(this.Configuration.GetConnectionString("SQLServerConnection"));
             });
 
+            services.AddScoped<IOperations<Product>, ManageOperations<Product>>();
             services.AddScoped<IRepository<Product>, GenericRepository<Product>>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<Seeder>();
 

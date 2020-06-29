@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DemoApp.Web.Data;
-using DemoApp.Web.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using App.Infrastructure.Data;
+using App.Entities;
 
 namespace DemoApp.Web.Controllers.API
 {
