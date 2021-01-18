@@ -25,4 +25,9 @@
     <ProjectReference Include="..\App.Infrastructure\App.Infrastructure.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\adminlte\" />
+  </ItemGroup>
+
 </Project>
